@@ -26,12 +26,14 @@ jobs:
           node --version
           npm --version
 
+      - name: Install dependencies
+        shell: pwsh
+        run: npm install
+
       - name: Run tests
         shell: pwsh
-        run: |
-          if (Test-Path "package.json") {
-            npm test
-          }
-          else {
-            Write-Host "No package.json found."
-          }
+        run: npm test
+
+      - name: Build project
+        shell: pwsh
+        run: npm run build
