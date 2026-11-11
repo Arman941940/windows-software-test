@@ -1,0 +1,37 @@
+name: Windows Software Test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Check Windows
+        shell: pwsh
+        run: |
+          Write-Host "Windows runner is working!"
+          Get-CimInstance Win32_OperatingSystem |
+            Select-Object Caption, Version
+
+      - name: Check Node.js
+        shell: pwsh
+        run: |
+          node --version
+          npm --version
+
+      - name: Run tests
+        shell: pwsh
+        run: |
+          if (Test-Path "package.json") {
+            npm test
+          }
+          else {
+            Write-Host "No package.json found."
+          }
